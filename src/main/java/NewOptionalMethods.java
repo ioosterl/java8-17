@@ -3,7 +3,7 @@ import java.util.Optional;
 public class NewOptionalMethods {
 
     public static void main(String[] args) {
-        final var helloWorld = Optional.of("Hello, world");
+        final Optional<String> helloWorld = Optional.of("Hello, world");
         demoIfPresentOrElse(helloWorld);
         demoIfPresentOrElse(Optional.empty());
 
