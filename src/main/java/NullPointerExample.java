@@ -1,4 +1,4 @@
-public class MyService {
+public class NullPointerExample {
 
     private static Address getAddress() {
         return new Address(
@@ -19,7 +19,7 @@ public class MyService {
     }
 
     public static void main(String[] args) {
-        System.out.println(new MyService().formatAddress(getAddress()).equals("Demo Street 13\n - Example Town"));
+        System.out.println(new NullPointerExample().formatAddress(getAddress()).equals("Demo Street 13\n - Example Town"));
     }
 
     static class Address {
