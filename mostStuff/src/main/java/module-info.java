@@ -1,0 +1,3 @@
+module mostStuff {
+    requires myModule;
+}
