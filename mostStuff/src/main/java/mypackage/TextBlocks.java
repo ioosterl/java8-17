@@ -1,3 +1,5 @@
+package mypackage;
+
 public class TextBlocks {
 
     static final String firstBlock = """

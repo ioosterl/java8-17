@@ -1,3 +1,5 @@
+package mypackage;
+
 import java.util.Optional;
 
 public class NewOptionalMethods {
@@ -14,7 +16,7 @@ public class NewOptionalMethods {
         Optional.empty().orElseThrow();
     }
 
-    private static void demoIfPresentOrElse(Optional<?> myOpt) {
+    private static void demoIfPresentOrElse(Optional myOpt) {
         myOpt.ifPresentOrElse(System.out::println, () -> System.out.println("No text was given"));
     }
 }

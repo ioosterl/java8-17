@@ -1,3 +1,5 @@
+package mypackage;
+
 public class NullPointerExample {
 
     private static Address getAddress() {

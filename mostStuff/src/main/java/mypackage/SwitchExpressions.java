@@ -1,13 +1,15 @@
+package mypackage;
+
 public class SwitchExpressions {
 
-    static enum WeekDays {
+    enum WeekDays {
         MONDAY,
         TUESDAY,
         WEDNESDAY,
         THURSDAY,
         FRIDAY,
         SATURDAY,
-        SUNDAY;
+        SUNDAY
     }
 
     public static void main(String[] args) {
