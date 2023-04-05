@@ -5,15 +5,17 @@ import java.util.Optional;
 public class NewOptionalMethods {
 
     public static void main(String[] args) {
-        final Optional<String> helloWorld = Optional.of("Hello, world");
+        final var helloWorld = Optional.of("Hello, world");
+
         demoIfPresentOrElse(helloWorld);
-        demoIfPresentOrElse(Optional.empty());
 
-        demoIfPresentOrElse(Optional.empty().or(() -> helloWorld));
+//        demoIfPresentOrElse(Optional.empty());
 
-        helloWorld.stream().forEach(System.out::println);
+//        demoIfPresentOrElse(Optional.empty().or(() -> helloWorld));
 
-        Optional.empty().orElseThrow();
+//        helloWorld.stream().forEach(System.out::println);
+
+//        Optional.empty().orElseThrow();
     }
 
     private static void demoIfPresentOrElse(Optional myOpt) {

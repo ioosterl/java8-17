@@ -7,31 +7,33 @@ import java.util.stream.IntStream;
 public class NewStreamMethods {
 
     public static void main(String[] args) {
-        demoMapMulti();
+        /* Stream methods */
+//        demoMapMulti();
 
-        demoTakeWhile();
+//        demoTakeWhile();
 
-        demoToList();
+//        demoToList();
 
+        /* Colllectors */
         demoFlatMapping();
 
-        demoFiltering();
+//        demoFiltering();
 
-        demoTeeing();
+//        demoTeeing();
 
     }
 
     private static void demoTeeing() {
         List<Blog> blogList = Arrays.asList(
                 new Blog("Ann", "meh", "great", "blah"),
-                new Blog("Sue", "horrible" ),
-                new Blog("James", "+1", "superb", "write more", "enjoyed" ),
+                new Blog("Sue", "horrible"),
+                new Blog("James", "+1", "superb", "write more", "enjoyed"),
                 new Blog("Bill"));
 
         Map<String, Object> result = blogList.stream().collect(
                 Collectors.teeing(
-                        Collectors.filtering(b -> b.getComments().size() >= 3, Collectors.toList()),
-                        Collectors.filtering(e -> e.getComments().size() >=3, Collectors.counting()),
+                        Collectors.filtering(b -> b.comments().size() >= 3, Collectors.toList()),
+                        Collectors.filtering(e -> e.comments().size() >= 3, Collectors.counting()),
                         (list, count) -> {
                             var map = new HashMap<String, Object>();
                             map.put("list", list);
@@ -63,34 +65,24 @@ public class NewStreamMethods {
         Blog blog2 = new Blog("Ann", "Disappointing", "Ok", "Could be better");
         List<Blog> blogs = List.of(blog1, blog2);
 
-        Map<String, List<String>> commentsByAuthor = blogs.stream()
-                .collect(Collectors.groupingBy(Blog::getAuthorName,
-                        Collectors.flatMapping(blog -> blog.getComments().stream(),
-                                Collectors.toList())));
-        System.out.println(commentsByAuthor);
-
         Map<String, List<List<String>>> commentsByAuthorUsingMapping = blogs.stream()
-                .collect(Collectors.groupingBy(Blog::getAuthorName,
-                        Collectors.mapping(Blog::getComments,
+                .collect(Collectors.groupingBy(Blog::authorName,
+                        Collectors.mapping(Blog::comments,
                                 Collectors.toList())));
-        System.out.println(commentsByAuthorUsingMapping);
+        System.out.println("Mapping: "+commentsByAuthorUsingMapping);
+
+        Map<String, List<String>> commentsByAuthor = blogs.stream()
+                .collect(Collectors.groupingBy(Blog::authorName,
+                        Collectors.flatMapping(blog -> blog.comments().stream(),
+                                Collectors.toList())));
+        System.out.println("Flatmapping: "+ commentsByAuthor);
+
     }
 
-    static class Blog {
-        private String authorName;
-        private List<String> comments;
+    static record Blog(String authorName, List<String> comments) {
 
         Blog(String author, String... comments) {
-            authorName = author;
-            this.comments = Arrays.asList(comments);
-        }
-
-        public String getAuthorName() {
-            return authorName;
-        }
-
-        public List<String> getComments() {
-            return comments;
+            this(author, Arrays.asList(comments));
         }
     }
 
@@ -100,7 +92,7 @@ public class NewStreamMethods {
                     .boxed()
                     .toList();
             toList.add(12);
-            System.out.println("toList: "+ toList);
+            System.out.println("toList: " + toList);
         } catch (UnsupportedOperationException uoe) {
             uoe.printStackTrace();
         }
@@ -109,13 +101,13 @@ public class NewStreamMethods {
                 .boxed()
                 .collect(Collectors.toList());
         collectToList.add(12); // works but not guaranteed that the returned list is mutable
-        System.out.println("collectToLIst: "+collectToList);
+        System.out.println("collectToLIst: " + collectToList);
 
         List<Integer> collectToCollections = IntStream.iterate(0, i -> i < 10, i -> i + 2)
                 .boxed()
                 .collect(Collectors.toCollection(ArrayList::new));
         collectToCollections.add(12); // we are sure this works, due to controlling the supplier for the collection
-        System.out.println("collectToCollection:"+collectToCollections);
+        System.out.println("collectToCollection:" + collectToCollections);
     }
 
     private static void demoTakeWhile() {
@@ -135,7 +127,10 @@ public class NewStreamMethods {
     private static void demoMapMulti() {
         System.out.println(IntStream.rangeClosed(1, 5)
                 .boxed()
-                .mapMulti((i, buffer) -> IntStream.rangeClosed(1, 3).mapToDouble(Double::valueOf).map(n -> Math.pow(i, n)).forEach(buffer::accept))
+                .mapMulti((i, buffer) -> IntStream.rangeClosed(1, 3)
+                        .mapToDouble(Double::valueOf)
+                        .map(n -> Math.pow(i, n))
+                        .forEach(buffer::accept))
                 .map(d -> ((Double) d).intValue())
                 .toList());
     }
