@@ -1,5 +1,6 @@
 package mypackage;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -11,6 +12,7 @@ public class CollectionsFactoryMethods {
 
     public static void main(String[] args) {
         List<String> myList = List.of("hello", "world");
+        var l = Arrays.asList("Hello", "world");
 
         Set<Integer> mySet = Set.of(1,2,3,4);
 
